@@ -1,0 +1,6 @@
+[default]
+port=4000
+
+[default.databases.urls]
+url="sqlite://database.db"
+
