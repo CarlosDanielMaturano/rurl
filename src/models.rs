@@ -11,7 +11,7 @@ impl ShortenUrl {
         let shorten_url = uuid::Uuid::new_v4().to_string();
         Self {
             original_url,
-            shorten_url
+            shorten_url,
         }
     }
 }
