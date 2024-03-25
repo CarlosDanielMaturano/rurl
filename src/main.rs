@@ -1,10 +1,10 @@
-#[macro_use] 
+#[macro_use]
 extern crate rocket;
 
-mod routes;
 mod database;
 mod models;
 mod responder;
+mod routes;
 
 use rocket_db_pools::Database;
 
@@ -15,5 +15,5 @@ async fn main() -> Result<(), rocket::Error> {
         .mount("/", routes::build_routes())
         .launch()
         .await;
-    Ok(()) 
+    Ok(())
 }

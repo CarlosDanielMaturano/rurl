@@ -1,12 +1,14 @@
+use rocket::response::{self, Responder, Response};
 use rocket::{http::Status, Request};
-use rocket::response::{self, Response, Responder};
 use serde_json::Value;
 use std::io::Cursor;
 
 pub struct ApiResponder {
     status: Status,
-    body: Value
+    body: Value,
 }
+
+pub type ApiResponse = Result<ApiResponder, ApiResponder>;
 
 impl ApiResponder {
     pub fn new(status: Status, body: Value) -> Self {
