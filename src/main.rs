@@ -4,6 +4,7 @@ extern crate rocket;
 mod routes;
 mod database;
 mod models;
+mod responder;
 
 use rocket_db_pools::Database;
 
