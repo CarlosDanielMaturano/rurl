@@ -44,7 +44,7 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
         Status::Ok,
         json!({
             "message": "Sucessfully created a new shorten url",
-            "url": shorten_url
+            "shorten_url": shorten_url
         }),
     ))
 }

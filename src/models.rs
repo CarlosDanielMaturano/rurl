@@ -9,9 +9,7 @@ pub struct ShortenUrl {
 
 impl ShortenUrl {
     pub fn new(url: String) -> Self {
-        let hash = RandomState::new()
-                .hash_one(&url)
-                .to_string();
+        let hash = RandomState::new().hash_one(&url).to_string();
         Self {
             url,
             hash,

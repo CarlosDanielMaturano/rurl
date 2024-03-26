@@ -12,17 +12,28 @@ pub async fn view_shorten_url(mut db: Connection<Db>, hash: String) -> ApiRespon
         "SELECT url, hash FROM urls WHERE hash = ?",
         hash
     )
-    .fetch_one(&mut **db)
+    .fetch_optional(&mut **db)
     .map_err(|err| {
         eprintln!("{err}");
         ApiResponder::new(
             Status::InternalServerError,         
             json!({
-                "err": "Could not get the shorten url due to server malfunction"
+                "message": "Could not get the shorten url due to server malfunction",
+                "err": "Internal Server Error"
             })
         )
     })
-    .await?;
+    .await?
+    .ok_or_else(||
+        ApiResponder::new(
+            Status::NotFound,
+            json!({
+                "message": "Could not find a shorten url with the given hash",
+                "err": "Not Found"
+            })
+        )
+    )?;
+
     let shorten_url = ShortenUrl {
         url: values.url,
         hash: values.hash
