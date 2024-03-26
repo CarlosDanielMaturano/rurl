@@ -22,7 +22,3 @@ version="0.7.0"
 default-features=false
 features=["macros"]
 
-[dependencies.uuid]
-version="1.8.0"
-features=["v4"]
-

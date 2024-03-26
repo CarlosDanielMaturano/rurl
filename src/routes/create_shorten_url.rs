@@ -24,9 +24,9 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
     let shorten_url = ShortenUrl::new(url);
 
     sqlx::query!(
-        "INSERT INTO urls (original, shorten) VALUES (?, ?)",
-        shorten_url.original_url,
-        shorten_url.shorten_url
+        "INSERT INTO urls (url, hash) VALUES (?, ?)",
+        shorten_url.url,
+        shorten_url.hash
     )
     .execute(&mut **db)
     .await
@@ -34,8 +34,9 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
         eprintln!("{err}");
         ApiResponder::new(
             Status::InternalServerError,
-            json!({ "err": "Could not create a new shorte url due to server malfunction"}
-            ),
+            json!({ 
+                "err": "Could not create a new shorten url due to server malfunction"
+            }),
         )
     })?;
 

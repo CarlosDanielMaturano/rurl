@@ -1,17 +1,20 @@
 use rocket::serde::{Deserialize, Serialize};
+use std::hash::{BuildHasher, RandomState};
 
 #[derive(Serialize, Deserialize)]
 pub struct ShortenUrl {
-    pub original_url: String,
-    pub shorten_url: String,
+    pub url: String,
+    pub hash: String,
 }
 
 impl ShortenUrl {
-    pub fn new(original_url: String) -> Self {
-        let shorten_url = uuid::Uuid::new_v4().to_string();
+    pub fn new(url: String) -> Self {
+        let hash = RandomState::new()
+                .hash_one(&url)
+                .to_string();
         Self {
-            original_url,
-            shorten_url,
+            url,
+            hash,
         }
     }
 }

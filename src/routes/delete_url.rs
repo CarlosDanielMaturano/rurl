@@ -4,9 +4,9 @@ use rocket::http::Status;
 use rocket_db_pools::{sqlx, Connection};
 use serde_json::json;
 
-#[delete("/delete/<shorten>")]
-pub async fn delete_url(mut db: Connection<Db>, shorten: String) -> ApiResponse {
-    sqlx::query!("DELETE FROM urls where shorten = ?", shorten)
+#[delete("/delete/<hash>")]
+pub async fn delete_url(mut db: Connection<Db>, hash: String) -> ApiResponse {
+    sqlx::query!("DELETE FROM urls where hash = ?", hash)
         .execute(&mut **db)
         .await
         .map_err(|err| {

@@ -2,6 +2,6 @@
 DROP TABLE IF EXISTS urls;
 CREATE TABLE urls (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    original TEXT NOT NULL,
-    shorten TEXT NOT NULL
+    url TEXT NOT NULL,
+    hash TEXT NOT NULL
 );
