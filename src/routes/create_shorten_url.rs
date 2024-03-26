@@ -1,9 +1,10 @@
 use crate::database::Db;
-use crate::errors::{DefaultApiError, InternalServerError};
+use crate::errors::{BadRequestError, DefaultApiError, InternalServerError};
 use crate::models::ShortenUrl;
 use crate::responder::{ApiResponder, ApiResponse};
+use core::fmt;
 use rocket::http::Status;
-use rocket::serde::{json::Json, Deserialize};
+use rocket::serde::Deserialize;
 use rocket_db_pools::{sqlx, Connection};
 use serde_json::json;
 
@@ -12,18 +13,12 @@ pub struct Url {
     pub value: String,
 }
 
-#[post("/new", format = "json", data = "<url>")]
-pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) -> ApiResponse {
-    let url = url
-        .ok_or(ApiResponder::new(
-            Status::BadRequest,
-            json!({
-                "message": "Could not extract a valid url due to malformed body",
-                "err": "Bad Request"
-            }),
-        ))?
-        .into_inner()
-        .value;
+#[post("/new?<url>")]
+pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<String>) -> ApiResponse {
+    let url = url.ok_or(BadRequestError::new(
+            "Missing url parameter",
+            "Provide a url parameter. E.g ?url=https//www.google.com"
+    ))?;
 
     let shorten_url = ShortenUrl::new(url);
 

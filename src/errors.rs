@@ -23,14 +23,17 @@ pub trait DefaultApiError {
     }
 }
 
-pub struct InternalServerError {}
-
+pub struct InternalServerError;
 impl DefaultApiError for InternalServerError {
     const STATUS: Status = Status::InternalServerError;
 }
 
-pub struct NotFoundError {}
-
+pub struct NotFoundError;
 impl DefaultApiError for NotFoundError {
     const STATUS: Status = Status::NotFound;
+}
+
+pub struct BadRequestError;
+impl DefaultApiError for BadRequestError {
+    const STATUS: Status = Status::BadRequest;
 }
