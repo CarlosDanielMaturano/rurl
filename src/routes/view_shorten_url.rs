@@ -1,5 +1,5 @@
 use crate::database::Db;
-use crate::errors::{DefaultApiError, InternalServerError};
+use crate::errors::{DefaultApiError, InternalServerError, NotFoundError};
 use crate::models::ShortenUrl;
 use crate::responder::{ApiResponder, ApiResponse};
 use rocket::futures::TryFutureExt;
@@ -12,19 +12,13 @@ pub async fn view_shorten_url(mut db: Connection<Db>, hash: String) -> ApiRespon
     let values = sqlx::query!("SELECT url, hash FROM urls WHERE hash = ?", hash)
         .fetch_optional(&mut **db)
         .map_err(|err| {
-            InternalServerError::new(
-                err, 
-                "Could not get the url deu to server malfunction"  
-            )
+            InternalServerError::new(err, "Could not get the url deu to server malfunction")
         })
         .await?
         .ok_or_else(|| {
-            ApiResponder::new(
-                Status::NotFound,
-                json!({
-                    "message": "Could not find a shorten url with the given hash",
-                    "err": "Not Found"
-                }),
+            NotFoundError::new(
+                "Query returned none",
+                "Could not find a shorten url with the given hash",
             )
         })?;
 
@@ -33,7 +27,7 @@ pub async fn view_shorten_url(mut db: Connection<Db>, hash: String) -> ApiRespon
         hash: values.hash,
     };
     Ok(ApiResponder::new(
-        Status::Ok,
+        Status::Found,
         json!({
             "message": "Sucessfully founded the url.",
             "shorten_url": shorten_url

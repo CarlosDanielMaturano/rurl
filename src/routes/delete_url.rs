@@ -1,4 +1,5 @@
 use crate::database::Db;
+use crate::errors::{DefaultApiError, InternalServerError};
 use crate::responder::{ApiResponder, ApiResponse};
 use rocket::http::Status;
 use rocket_db_pools::{sqlx, Connection};
@@ -10,15 +11,9 @@ pub async fn delete_url(mut db: Connection<Db>, hash: String) -> ApiResponse {
         .execute(&mut **db)
         .await
         .map_err(|err| {
-            eprintln!("{err}");
-            ApiResponder::new(
-                Status::InternalServerError,
-                json!({
-                    "message": "Could not delete the url due to server malfuction.",
-                    "err": "Internal Server Error"
-                }),
-            )
+            InternalServerError::new(err, "Could not delete the url due to server malfuction.")
         })?;
+
     Ok(ApiResponder::new(
         Status::Ok,
         json!({
