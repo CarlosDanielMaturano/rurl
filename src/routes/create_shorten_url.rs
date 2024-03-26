@@ -1,4 +1,5 @@
 use crate::database::Db;
+use crate::errors::InternalServerError;
 use crate::models::ShortenUrl;
 use crate::responder::{ApiResponder, ApiResponse};
 use rocket::http::Status;
@@ -16,7 +17,7 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
     let url = url
         .ok_or(ApiResponder::new(
             Status::BadRequest,
-            json!({ 
+            json!({
                 "message": "Could not extract a valid url due to malformed body",
                 "err": "Bad Request"
             }),
@@ -34,13 +35,9 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
     .execute(&mut **db)
     .await
     .map_err(|err| {
-        eprintln!("{err}");
-        ApiResponder::new(
-            Status::InternalServerError,
-            json!({ 
-                "message": "Could not create a new shorten url due to server malfunction",
-                "err": "Internal Server Error"
-            }),
+        InternalServerError::log_and_respond(
+            err,
+            "Could not create a new shorten url due to server malfunction",
         )
     })?;
 

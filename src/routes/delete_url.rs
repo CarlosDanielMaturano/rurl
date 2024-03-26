@@ -23,6 +23,6 @@ pub async fn delete_url(mut db: Connection<Db>, hash: String) -> ApiResponse {
         Status::Ok,
         json!({
             "message": "Sucessfully deleted the url."
-        })
+        }),
     ))
 }
