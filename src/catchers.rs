@@ -7,7 +7,7 @@ fn not_found(req: &Request) -> ApiResponder {
     let uri = req.uri();
     let method = req.method();
     NotFoundError::new(
-        format!("No matching routes for {method} {uri}"),
+        format!("Client request unhandled method {method} for {uri}"),
         "Sorry. The server was unable to found what are you looking for."
     )
 }

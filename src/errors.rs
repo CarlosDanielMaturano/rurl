@@ -2,9 +2,11 @@ use crate::responder::ApiResponder;
 use core::fmt::Display;
 use rocket::http::Status;
 use serde_json::json;
+use log::{warn, Level, error};
 
 pub trait DefaultApiError {
     const STATUS: Status;
+    const LOG_LEVEL: Level;
     fn respond(message: &str) -> ApiResponder {
         ApiResponder::new(
             Self::STATUS,
@@ -15,7 +17,12 @@ pub trait DefaultApiError {
         )
     }
     fn log<T: Display>(err: T) {
-        eprintln!("Server error: {err}")
+        match Self::LOG_LEVEL {
+            Level::Warn => warn!("{err}"),
+            Level::Error => error!("{err}"),
+            Level::Info => info!("{err}"),
+            _ => eprintln!("{err}")
+        }
     }
     fn new<T: Display>(err: T, message: &str) -> ApiResponder {
         Self::log(err);
@@ -26,14 +33,17 @@ pub trait DefaultApiError {
 pub struct InternalServerError;
 impl DefaultApiError for InternalServerError {
     const STATUS: Status = Status::InternalServerError;
+    const LOG_LEVEL: Level = Level::Error;
 }
 
 pub struct NotFoundError;
 impl DefaultApiError for NotFoundError {
     const STATUS: Status = Status::NotFound;
+    const LOG_LEVEL: Level = Level::Info;
 }
 
 pub struct BadRequestError;
 impl DefaultApiError for BadRequestError {
+    const LOG_LEVEL: Level = Level::Info;
     const STATUS: Status = Status::BadRequest;
 }
