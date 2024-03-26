@@ -39,11 +39,11 @@ impl DefaultApiError for InternalServerError {
 pub struct NotFoundError;
 impl DefaultApiError for NotFoundError {
     const STATUS: Status = Status::NotFound;
-    const LOG_LEVEL: Level = Level::Info;
+    const LOG_LEVEL: Level = Level::Warn;
 }
 
 pub struct BadRequestError;
 impl DefaultApiError for BadRequestError {
-    const LOG_LEVEL: Level = Level::Info;
+    const LOG_LEVEL: Level = Level::Warn;
     const STATUS: Status = Status::BadRequest;
 }

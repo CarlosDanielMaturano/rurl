@@ -13,6 +13,7 @@ use rocket_db_pools::Database;
 
 #[rocket::main]
 async fn main() -> Result<(), String> {
+    dotenv::dotenv().ok();
     logger::setup_logger()
         .map_err(|err| format!("Could not initialize the logger. Error: {err}"))?;
     let _rocket = rocket::build()

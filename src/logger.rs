@@ -1,9 +1,14 @@
 use std::time::SystemTime;
+use std::io::{Error, ErrorKind};
 use colored::Colorize;
 use log::Level;
 
 pub fn setup_logger() -> Result<(), fern::InitError> {
-    let output_file = "output.log";
+    let output_file =  std::env::var("LOG_PATH")
+        .map_err(|err| {
+            eprintln!("Missing LOG_PATH env variable!");
+            Error::new(ErrorKind::Other, err)
+        })?;
     fern::Dispatch::new()
         .format(|out, message, record| {
             let time = humantime::format_rfc3339_seconds(SystemTime::now());
