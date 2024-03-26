@@ -22,3 +22,6 @@ version="0.7.0"
 default-features=false
 features=["macros"]
 
+
+[dependencies.url]
+version="2.5.0"

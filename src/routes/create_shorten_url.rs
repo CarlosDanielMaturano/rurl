@@ -2,16 +2,10 @@ use crate::database::Db;
 use crate::errors::{BadRequestError, DefaultApiError, InternalServerError};
 use crate::models::ShortenUrl;
 use crate::responder::{ApiResponder, ApiResponse};
-use core::fmt;
 use rocket::http::Status;
-use rocket::serde::Deserialize;
 use rocket_db_pools::{sqlx, Connection};
 use serde_json::json;
-
-#[derive(Deserialize)]
-pub struct Url {
-    pub value: String,
-}
+use url::Url;
 
 #[post("/new?<url>")]
 pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<String>) -> ApiResponse {
@@ -19,6 +13,13 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<String>) -> 
             "Missing url parameter",
             "Provide a url parameter. E.g ?url=https//www.google.com"
     ))?;
+
+    let url = Url::parse(&url).map_err(|err| {
+        BadRequestError::new(
+            err,
+            "The given url is not a valid url"
+        )
+    })?.to_string();
 
     let shorten_url = ShortenUrl::new(url);
 
