@@ -1,11 +1,12 @@
 use crate::errors::{DefaultApiError, InternalServerError, NotFoundError};
 use crate::responder::ApiResponder;
 use rocket::{Catcher, Request};
+use colored::Colorize;
 
 #[catch(404)]
 fn not_found(req: &Request) -> ApiResponder {
-    let uri = req.uri();
-    let method = req.method();
+    let uri = req.uri().to_string().green();
+    let method = req.method().to_string().yellow();
     NotFoundError::new(
         format!("Client request unhandled method {method} for {uri}"),
         "Sorry. The server was unable to found what are you looking for."

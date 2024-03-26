@@ -2,7 +2,8 @@ use crate::responder::ApiResponder;
 use core::fmt::Display;
 use rocket::http::Status;
 use serde_json::json;
-use log::{warn, Level, error};
+use log::{warn, Level};
+use colored::Colorize;
 
 pub trait DefaultApiError {
     const STATUS: Status;
@@ -20,8 +21,7 @@ pub trait DefaultApiError {
         match Self::LOG_LEVEL {
             Level::Warn => warn!("{err}"),
             Level::Error => error!("{err}"),
-            Level::Info => info!("{err}"),
-            _ => eprintln!("{err}")
+            _ => eprintln!("{}: {err}", "Err".red())
         }
     }
     fn new<T: Display>(err: T, message: &str) -> ApiResponder {
