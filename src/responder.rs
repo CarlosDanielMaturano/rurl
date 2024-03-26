@@ -1,6 +1,6 @@
 use rocket::response::{self, Responder, Response};
 use rocket::{http::Status, Request};
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::io::Cursor;
 
 pub struct ApiResponder {
@@ -11,7 +11,11 @@ pub struct ApiResponder {
 pub type ApiResponse = Result<ApiResponder, ApiResponder>;
 
 impl ApiResponder {
-    pub fn new(status: Status, body: Value) -> Self {
+    pub fn new(status: Status, mut body: Value) -> Self {
+        let status_json = json!({ "status": status });
+        if let Some(body) = body.as_object_mut(){
+            body.extend(status_json.as_object().unwrap().clone())
+        }
         Self { status, body }
     }
 }
