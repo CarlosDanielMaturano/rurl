@@ -14,7 +14,8 @@ pub async fn delete_url(mut db: Connection<Db>, hash: String) -> ApiResponse {
             ApiResponder::new(
                 Status::InternalServerError,
                 json!({
-                    "err": "Could not delete the url due to server malfuction."
+                    "message": "Could not delete the url due to server malfuction.",
+                    "err": "Internal Server Error"
                 }),
             )
         })?;

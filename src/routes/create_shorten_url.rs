@@ -16,7 +16,10 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
     let url = url
         .ok_or(ApiResponder::new(
             Status::BadRequest,
-            json!({ "err": "Could not extract a valid url due to malformed body"}),
+            json!({ 
+                "message": "Could not extract a valid url due to malformed body",
+                "err": "Bad Request"
+            }),
         ))?
         .into_inner()
         .value;
@@ -35,7 +38,8 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
         ApiResponder::new(
             Status::InternalServerError,
             json!({ 
-                "err": "Could not create a new shorten url due to server malfunction"
+                "message": "Could not create a new shorten url due to server malfunction",
+                "err": "Internal Server Error"
             }),
         )
     })?;
