@@ -12,7 +12,7 @@ pub async fn view_shorten_url(mut db: Connection<Db>, hash: String) -> ApiRespon
     let values = sqlx::query!("SELECT url, hash FROM urls WHERE hash = ?", hash)
         .fetch_optional(&mut **db)
         .map_err(|err| {
-            InternalServerError::new(err, "Could not get the url deu to server malfunction")
+            InternalServerError::new(err, "Could not get the shorten url due to server malfunction.")
         })
         .await?
         .ok_or_else(|| {

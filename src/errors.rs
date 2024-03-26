@@ -44,6 +44,6 @@ impl DefaultApiError for NotFoundError {
 
 pub struct BadRequestError;
 impl DefaultApiError for BadRequestError {
-    const LOG_LEVEL: Level = Level::Warn;
+    const LOG_LEVEL: Level = Level::Debug;
     const STATUS: Status = Status::BadRequest;
 }
