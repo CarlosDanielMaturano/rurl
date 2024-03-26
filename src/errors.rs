@@ -3,20 +3,14 @@ use core::fmt::Display;
 use rocket::http::Status;
 use serde_json::json;
 
-
 pub trait DefaultApiError {
-    fn respond(message: &str) -> ApiResponder;
-    fn log<T: Display>(err: T);
-}
-
-pub struct InternalServerError {}
-
-impl DefaultApiError for InternalServerError {
+    const STATUS: Status;
+    const ERR_MESSAGE: &'static str;
     fn respond(message: &str) -> ApiResponder {
         ApiResponder::new(
-            Status::InternalServerError,
+            Self::STATUS,
             json!({
-                "err": "Internal Server Error",
+                "err": Self::ERR_MESSAGE,
                 "message": message
             })
         )
@@ -24,12 +18,16 @@ impl DefaultApiError for InternalServerError {
     fn log<T: Display>(err: T) {
         eprintln!("Server error: {err}")
     }
-}
-
-
-impl InternalServerError {
-    pub fn log_and_respond<T: Display>(err: T, message: &str)  -> ApiResponder {
+    fn new<T: Display>(err: T, message: &str)  -> ApiResponder {
         Self::log(err);
         Self::respond(message)
     }
 }
+
+pub struct InternalServerError {}
+
+impl DefaultApiError for InternalServerError {
+    const STATUS: Status = Status::InternalServerError;
+    const ERR_MESSAGE: &'static str = "Internal server error";
+}
+

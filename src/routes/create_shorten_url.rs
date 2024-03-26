@@ -1,5 +1,5 @@
 use crate::database::Db;
-use crate::errors::InternalServerError;
+use crate::errors::{DefaultApiError, InternalServerError};
 use crate::models::ShortenUrl;
 use crate::responder::{ApiResponder, ApiResponse};
 use rocket::http::Status;
@@ -35,7 +35,7 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<Json<Url>>) 
     .execute(&mut **db)
     .await
     .map_err(|err| {
-        InternalServerError::log_and_respond(
+        InternalServerError::new(
             err,
             "Could not create a new shorten url due to server malfunction",
         )
