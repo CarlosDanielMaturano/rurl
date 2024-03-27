@@ -9,10 +9,12 @@ use url::Url;
 
 #[post("/new?<url>")]
 pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<String>) -> ApiResponse {
-    let url = url.ok_or(BadRequestError::new(
+    let url = url.ok_or_else(||
+        BadRequestError::new(
             "Missing url parameter",
             "Provide a url parameter. E.g ?url=https//www.google.com"
-    ))?;
+        )
+    )?;
 
     let url = Url::parse(&url).map_err(|err| {
         BadRequestError::new(
