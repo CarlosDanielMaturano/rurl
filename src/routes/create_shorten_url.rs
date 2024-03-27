@@ -38,7 +38,7 @@ pub async fn create_shorten_url(mut db: Connection<Db>, url: Option<String>) -> 
     })?;
 
     Ok(ApiResponder::new(
-        Status::Ok,
+        Status::Created,
         json!({
             "message": "Sucessfully created a new shorten url",
             "shorten_url": shorten_url
