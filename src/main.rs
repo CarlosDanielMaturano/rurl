@@ -9,6 +9,9 @@ mod routes;
 mod catchers;
 mod logger;
 
+#[cfg(test)]
+mod tests;
+
 use log::warn;
 use rocket_db_pools::Database;
 use colored::Colorize;
