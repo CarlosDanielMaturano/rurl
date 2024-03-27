@@ -8,23 +8,22 @@ mod responder;
 mod routes;
 mod catchers;
 mod logger;
+mod build_rocket;
 
 #[cfg(test)]
 mod tests;
 
-use log::warn;
-use rocket_db_pools::Database;
+use build_rocket::build_rocket;
 use colored::Colorize;
+use log::warn;
 
 #[rocket::main]
 async fn main() -> Result<(), String> {
     dotenv::dotenv().ok();
     logger::setup_logger()
         .map_err(|err| format!("Could not initialize the logger. Error: {err}"))?;
-    let rocket = rocket::build()
-        .attach(crate::database::Db::init())
-        .mount("/", routes::build_routes())
-        .register("/", catchers::build_catchers())
+
+    let rocket = build_rocket()
         .ignite()
         .await
         .map_err(|err| format!("Could not ignite a rocket instance Error: {err}"))?;
@@ -37,6 +36,6 @@ async fn main() -> Result<(), String> {
     rocket
         .launch()
         .await
-        .map_err(|err| format!("Could not initalize a rocket instance. Error: {err}"))?;
+        .map_err(|err| format!("Could not launch a rocket instance. Error: {err}"))?;
     Ok(())
 }
