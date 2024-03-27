@@ -1,8 +1,11 @@
 [global]
 log_level = "off"
 
+[release]
+address="0.0.0.0"
+
 [default]
 port=4000
 
 [default.databases.urls]
-url="sqlite://database.db"
+url="sqlite://database/database.db"

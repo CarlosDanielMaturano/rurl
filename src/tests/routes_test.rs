@@ -1,6 +1,7 @@
-use crate::build_rocket::build_rocket;
+use crate::{build_rocket::build_rocket, models::ShortenUrl};
 use rocket::{http::Status, local::blocking::Client};
 use serde_json::json;
+use serde::{Deserialize, Serialize};
 
 #[test]
 fn hello_route_should_return_200() {
@@ -40,10 +41,24 @@ fn create_url_with_bad_parameter_should_return_400() {
 }
 
 #[test]
-fn create_url_good_parameter_should_return_201() {
+fn create_url_with_good_parameter_should_return_201_and_delete_it_should_return_200() {
+    #[derive(Serialize, Deserialize)]
+    struct ExpectedResponseBody {
+        message: String,
+        status: i32,
+        shorten_url: ShortenUrl
+    }
+
     let rocket = build_rocket(); 
     let client = Client::tracked(rocket).unwrap();
     let url = "https://www.google.com";
     let res = client.post(format!("/new?url={url}")).dispatch();
-    assert_eq!(res.status(), Status::Created);
+    let status = res.status();
+    let res_body = res.into_json::<ExpectedResponseBody>().unwrap();
+    assert_eq!(status, Status::Created);
+
+    // Delete the created url
+    let hash = res_body.shorten_url.hash;
+    let res = client.delete(format!("/delete/{hash}")).dispatch();
+    assert_eq!(res.status(), Status::Ok);
 }

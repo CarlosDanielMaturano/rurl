@@ -2,6 +2,15 @@
 name = "rurl"
 version = "0.1.0"
 edition = "2021"
+default-run = "rurl"
+
+[[bin]]
+name= "rurl"
+path = "src/main.rs"
+
+[[bin]]
+name= "setup-database"
+path = "src/bin/setup_database.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -25,8 +34,7 @@ features=["sqlx_sqlite"]
 [dependencies.sqlx]
 version="0.7.0"
 default-features=false
-features=["macros"]
-
+features=["macros", "migrate"]
 
 [dependencies.url]
 version="2.5.0"
