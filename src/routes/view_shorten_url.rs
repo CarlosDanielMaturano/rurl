@@ -29,7 +29,7 @@ pub async fn view_shorten_url(mut db: Connection<Db>, hash: String) -> ApiRespon
     Ok(ApiResponder::new(
         Status::Found,
         json!({
-            "message": "Sucessfully founded the url.",
+            "message": "Sucessfully found the url.",
             "shorten_url": shorten_url
         }),
     ))

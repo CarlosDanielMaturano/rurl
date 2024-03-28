@@ -1,0 +1,9 @@
+version: "3"
+services:
+  rurl:
+    build: .
+    ports:
+      - 4000:4000
+    restart: always
+    volumes:
+      - /app/database:/var/lib/rurl/
