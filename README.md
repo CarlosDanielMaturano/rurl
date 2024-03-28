@@ -6,24 +6,24 @@
 
 ## Features :star:
 
-For now, the project only has 3 core features
+For now, the project only has 3 core features:
 
-- Create a new shorten url
-- View information about an existing shorten url
-- Delete a shorten url
-- Redirect to original url using shorten url
+- Create a new shorten url.
+- View information about n existing shorten url.
+- Delete a shorten url.
+- Redirect to original url.
 
 ## Installation :wrench:
 
 For using the project on your own, follow this steps:
 
-1. Clone the project: ``
+1. Clone the project: `git clone https://github.com/CarlosDanielMaturano/rurl.git`
 2. Setup the database: `cargo run --bin setup-database`
 3. Run the project: `cargo run`
 
 ## Docker :whale:
 
-The project includes a Dockerfile and a compose.yaml for containerization
+The project includes a Dockerfile and a compose.yaml for containerization.
 
 **Build the image**
 
@@ -38,12 +38,12 @@ The project includes a Dockerfile and a compose.yaml for containerization
 **Compose**
 
 - You can skip this hole process just by running: `docker-compose up`
-- **Note**: the compose file setups a volume under: `/var/lib/rurl`, make to change the path if you don`t like it
+- **Note**: the compose file setups a volume under: `/var/lib/rurl`, make sure to change the path if you don`t like it.
 
-## Usage
+## Usage :closed_book:
 
-See [Docs](./Docs.md)
+See [Docs](./Docs.md).
 
-## Lincese
+## Lincese :balance_scale:
 
-The project is under [MIT](./LICENSE) license
+The project is under [MIT](./LICENSE) license.
