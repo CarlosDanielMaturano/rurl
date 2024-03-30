@@ -11,9 +11,10 @@ RUN cp target/release/rurl .
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/rurl /app/
-COPY --from=builder /app/Rocket.toml /app/
-RUN mkdir logs database
+COPY --from=builder /app/rurl ./
+COPY --from=builder /app/Rocket.toml ./
+RUN mkdir -p ./logs ./database
+COPY --from=builder /app/database/ ./database/
 ENV LOG_PATH=logs/logs.log
 EXPOSE 4000
 CMD ["./rurl"]

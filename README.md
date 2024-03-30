@@ -38,7 +38,6 @@ The project includes a Dockerfile and a compose.yaml for containerization.
 **Compose**
 
 - You can skip this hole process just by running: `docker-compose up`
-- **Note**: the compose file setups a volume under: `/var/lib/rurl`, make sure to change the path if you don`t like it.
 
 ## Usage :closed_book:
 
